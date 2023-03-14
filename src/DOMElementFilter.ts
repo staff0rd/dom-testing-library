@@ -175,7 +175,7 @@ const testNode = (val: any) => {
 }
 
 export const test: NewPlugin['test'] = (val: any) =>
-  val?.constructor?.name && testNode(val)
+  (val?.constructor?.name || val?.constructor?.is) && testNode(val)
 
 type HandledType = Element | Text | Comment | DocumentFragment
 
@@ -195,7 +195,7 @@ export default function createDOMElementFilter(
   filterNode: (node: Node) => boolean,
 ): NewPlugin {
   return {
-    test: (val: any) => val?.constructor?.name && testNode(val),
+    test: (val: any) => test(val) && testNode(val),
     serialize: (
       node: HandledType,
       config: Config,
